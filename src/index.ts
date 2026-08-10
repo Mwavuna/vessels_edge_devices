@@ -23,8 +23,13 @@ const vessel = new Vessel(
     ]
 );
 
+let presenceInterval: NodeJS.Timeout | null = null;
+
 mqttClient.on("connect", () => {
     console.log("✅ Connected to MQTT Broker");
+
+    // publish retained presence so server knows this edge simulator is online
+    mqttClient.publish(`vessels/${vessel.identity.deviceId}/presence`, JSON.stringify({ status: 'online' }), { retain: true });
 
     mqttClient.subscribe("vessels/+/commands", (err) => {
         if (err) {
@@ -33,6 +38,15 @@ mqttClient.on("connect", () => {
             console.log("📡 Subscribed to vessel commands");
         }
     });
+
+    // periodically publish retained presence heartbeats so server knows this edge is live
+    presenceInterval = setInterval(() => {
+        try {
+            mqttClient.publish(`vessels/${vessel.identity.deviceId}/presence`, JSON.stringify({ status: 'online' }), { retain: true });
+        } catch (e) {
+            // ignore
+        }
+    }, 2000);
 
     setInterval(() => {
         vessel.simulate();
@@ -43,6 +57,25 @@ mqttClient.on("connect", () => {
         );
     }, 1000);
 });
+
+// attempt to mark presence offline on close/exit
+function markOffline() {
+    try {
+        mqttClient.publish(`vessels/${vessel.identity.deviceId}/presence`, JSON.stringify({ status: 'offline' }), { retain: true });
+        mqttClient.end(true);
+    } catch (e) {
+        // ignore
+    }
+}
+
+process.on('SIGINT', () => { markOffline(); process.exit(0); });
+process.on('SIGTERM', () => { markOffline(); process.exit(0); });
+mqttClient.on('close', () => { markOffline(); });
+process.on('exit', () => { markOffline(); });
+
+// clear presence interval when exiting
+process.on('SIGINT', () => { try { if (presenceInterval) clearInterval(presenceInterval); } catch {} });
+process.on('SIGTERM', () => { try { if (presenceInterval) clearInterval(presenceInterval); } catch {} });
 
 mqttClient.on("message", (topic, message) => {
     if (topic.includes("/commands")) {
@@ -58,4 +91,4 @@ mqttClient.on("message", (topic, message) => {
 
 mqttClient.on("error", (err) => {
     console.error("MQTT Error:", err.message);
-});
+});
