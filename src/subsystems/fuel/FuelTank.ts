@@ -48,9 +48,9 @@ export class FuelTank {
 
         return {
 
-            level: Number(this.level.toFixed(1)),
-            consumptionRate: Number(this.consumptionRate.toFixed(1)),
-            pressure: Number(this.pressure.toFixed(2))
+            level: Number(this.level.toFixed(4)),
+            consumptionRate: Number(this.consumptionRate.toFixed(4)),
+            pressure: Number(this.pressure.toFixed(4))
 
         };
 

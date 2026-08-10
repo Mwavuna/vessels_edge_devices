@@ -78,16 +78,9 @@ export class CoolingSystem implements VesselSubsystem {
         return {
 
 
-            temperature:
-                Number(
-                    this.coolantTemperature.toFixed(1)
-                ),
+            temperature: Number(this.coolantTemperature.toFixed(4)),
 
-
-            coolantLevel:
-                Number(
-                    this.coolantLevel.toFixed(1)
-                ),
+            coolantLevel: Number(this.coolantLevel.toFixed(4)),
 
 
             pumpSpeed:

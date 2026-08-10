@@ -72,13 +72,13 @@ export class Engine {
 
         return {
 
-            rpm:this.rpm,
+              rpm: Number(this.rpm.toFixed(4)),
 
-            temperature:this.temperature,
+              temperature: Number(this.temperature.toFixed(4)),
 
-            pressure:this.pressure,
+              pressure: Number(this.pressure.toFixed(4)),
 
-            load:this.load
+              load: Number(this.load.toFixed(4))
 
         };
 

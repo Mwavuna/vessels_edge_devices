@@ -78,23 +78,14 @@ export class ElectricalSystem implements VesselSubsystem {
 
             generator: {
 
-                voltage:
-                    Number(
-                        this.generatorVoltage.toFixed(1)
-                    ),
+                voltage: Number(this.generatorVoltage.toFixed(4)),
 
-                current:
-                    Number(
-                        this.generatorCurrent.toFixed(1)
-                    )
+                current: Number(this.generatorCurrent.toFixed(4))
 
             },
 
 
-            batteryLevel:
-                Number(
-                    this.batteryLevel.toFixed(1)
-                )
+            batteryLevel: Number(this.batteryLevel.toFixed(4))
 
         };
 

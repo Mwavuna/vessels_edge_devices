@@ -66,10 +66,10 @@ export class LubricationSystem implements VesselSubsystem {
 
         return {
 
-            oilPressure: Number(this.oilPressure.toFixed(2)),
-            oilTemperature: Number(this.oilTemperature.toFixed(1)),
-            oilLevel: Number(this.oilLevel.toFixed(1)),
-            oilQuality: Number(this.oilQuality.toFixed(1))
+            oilPressure: Number(this.oilPressure.toFixed(4)),
+            oilTemperature: Number(this.oilTemperature.toFixed(4)),
+            oilLevel: Number(this.oilLevel.toFixed(4)),
+            oilQuality: Number(this.oilQuality.toFixed(4))
 
         };
 
